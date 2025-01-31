@@ -1,16 +1,13 @@
 import express from 'express';
 import path from 'path';
-import dotenv from 'dotenv';
-
+import 'dotenv/config';
+import { fileURLToPath } from "url";
 import authRoutes from './routes/auth.route.js';
-
-dotenv.config();
+import { connectDB } from './db/db.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
 // Needed to have ESM recognize __dirname
-import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,4 +23,6 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    // Connect to database
+    connectDB();
 });
