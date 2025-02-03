@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.route.js';
 import { connectDB } from './db/db.js';
 
@@ -12,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 
 // Authentication
 app.use('/api/auth', authRoutes);

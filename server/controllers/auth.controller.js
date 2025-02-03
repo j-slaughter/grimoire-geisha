@@ -86,7 +86,7 @@ export const signup = async (req, res) => {
             role: newUser.role
         }, message: "User created successfully!"});
     } catch (error) {
-        return res.status(500).json({message: error.message});
+        return res.status(500).json({message: `Signup Error: ${error.message}`});
     }
 };
 
@@ -98,9 +98,24 @@ export const login = async (req, res) => {
 };
 
 /**
- * logout - Revokes access
+ * logout - Revokes access by clearing accessToken and refreshToken from cookies and Redis cache
  */
 export const logout = async (req, res) => {
-    res.send('Logout route called');
+    try {
+        const refreshToken = req.cookies.refreshToken;
+        // Check for valid refreshToken
+        if (refreshToken) {
+            // Grab user id and delete Redis entry
+            const {userId} = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            await redis.del(userId)
+        }
+        // Clear browser cookies
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
+        //
+        return res.status(200).json({message: "Successful logout!"});
+    } catch (error) {
+        return res.status(500).json({message: `Logout Error: ${error.message}`});
+    }
 };
 
