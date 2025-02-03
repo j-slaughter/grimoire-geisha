@@ -1,3 +1,7 @@
+/**
+ * @module user.model.js
+ * @description Creates a User model in MongoDB with password hashing
+ */
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 

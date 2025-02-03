@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import 'dotenv/config';
-import { fileURLToPath } from "url";
+import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.route.js';
 import { connectDB } from './db/db.js';
 
