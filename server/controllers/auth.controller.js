@@ -94,7 +94,30 @@ export const signup = async (req, res) => {
  * login - Validates user
  */
 export const login = async (req, res) => {
-    res.send('Login route called');
+    try {
+        const {email, password} = req.body;
+        // Validate email
+        const user = await User.findOne({email});
+        // Validate password
+        const validPassword = await user.comparePassword(password);
+        if (user && validPassword) {
+            // Create authentication tokens
+            const {accessToken, refreshToken} = generateTokens(user._id);
+            await storeRefreshToken(user._id, refreshToken);
+            // Set cookies
+            setCookies(res, accessToken, refreshToken);
+            return res.status(200).json({user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            }, message: "Successful login!"});
+        }
+        // 401 (Unauthorized)
+        return res.status(401).json({message: "Invalid login credentials!"})
+    } catch (error) {
+        return res.status(500).json({message: `Login error: ${error.message}`});
+    }
 };
 
 /**
