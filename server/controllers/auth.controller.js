@@ -135,10 +135,39 @@ export const logout = async (req, res) => {
         // Clear browser cookies
         res.clearCookie("accessToken");
         res.clearCookie("refreshToken");
-        //
         return res.status(200).json({message: "Successful logout!"});
     } catch (error) {
         return res.status(500).json({message: `Logout Error: ${error.message}`});
     }
 };
 
+/**
+ * renewAccess - Generates new accessToken and refreshToken when accessToken expires
+ */
+export const renewAccess = async (req, res) => {
+    try {
+        const oldRefreshToken = req.cookies.refreshToken;
+        // Check for valid refreshToken
+        if (oldRefreshToken) {
+            // Grab user id
+            const {userId} = jwt.verify(oldRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+            // Authenticate by comparing to Redis cache
+            const storedToken = await redis.get(userId);
+            if (oldRefreshToken === storedToken) {
+                // Generate new tokens
+                const {accessToken, refreshToken} = generateTokens(userId);
+                // Update Redis cache
+                await storeRefreshToken(userId, refreshToken);
+                // Set cookies
+                setCookies(res, accessToken, refreshToken);
+                return res.status(200).json({message: "Access renewed!"});
+            } else {
+                // 401 (Unauthorized)
+                return res.status(401).json({message: "Invalid user credentials!"});
+            }
+        }
+        return res.status(401).json({message: "Access has expired!"});
+    } catch (error) {
+        return res.status(500).json({message: `Error renewing tokens: ${error.message}`});
+    }
+};
