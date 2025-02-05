@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.route.js';
+import productRoutes from './routes/product.route.js';
 import { connectDB } from './db/db.js';
 
 const app = express();
@@ -18,9 +19,28 @@ app.use(cookieParser());
 // Authentication
 app.use('/api/auth', authRoutes);
 
+// Handling Products
+app.use('/api/products', productRoutes);
+
 // Landing page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+    res.status(404);
+    // respond with custom html page
+    // if (req.accepts('html')) {
+    //     return res.sendFile(path.join(__dirname, '404'));
+    // }
+    return res.send('Not Found');
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    return res.send(`Global error handler: ${err.message}`);
 });
 
 app.listen(PORT, () => {
