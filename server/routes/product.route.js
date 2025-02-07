@@ -4,10 +4,11 @@
  */
 
 import express from 'express';
+import { verifyAccess } from '../middleware/auth.middleware.js';
 import { getAllProducts } from '../controllers/product.controller.js';
 
 const router = express.Router();
 
-router.get('/', getAllProducts);
+router.get('/', verifyAccess, getAllProducts);
 
 export default router;
