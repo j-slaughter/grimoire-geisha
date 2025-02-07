@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Authentication
@@ -24,27 +24,27 @@ app.use('/api/products', productRoutes);
 
 // Landing page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 // 404 handler
 app.use('*', (req, res) => {
-    res.status(404);
-    // respond with custom html page
-    // if (req.accepts('html')) {
-    //     return res.sendFile(path.join(__dirname, '404'));
-    // }
-    return res.send('Not Found');
+  res.status(404);
+  // respond with custom html page
+  // if (req.accepts('html')) {
+  //     return res.sendFile(path.join(__dirname, '404'));
+  // }
+  return res.send('Not Found');
 });
 
 // Global error handler
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    return res.send(`Global error handler: ${err.message}`);
+  res.status(err.status || 500);
+  return res.send(`Global error handler: ${err.message}`);
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-    // Connect to database
-    connectDB();
+  console.log(`Server is running on http://localhost:${PORT}`);
+  // Connect to database
+  connectDB();
 });

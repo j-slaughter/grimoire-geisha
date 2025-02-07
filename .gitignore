@@ -15,6 +15,9 @@ node_modules/
 # dotenv environment variable files
 .env
 
+# DS_store
+.DS_store
+
 # vitepress build output
 **/.vitepress/dist
 
