@@ -42,3 +42,17 @@ export const verifyAccess = async (req, res, next) => {
     return res.status(500).json({ message: `Error in verifyAccess middleware: ${error.message}` });
   }
 };
+
+/**
+ * adminAccess - verifies user is an admin
+ */
+
+export const adminAccess = async (req, res, next) => {
+  // Check for logged in user(accessToken) and role of admin
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    // 403 (Forbidden)
+    return res.status(403).json({ message: 'Unauthorized access - Admin only!' });
+  }
+};
