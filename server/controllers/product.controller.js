@@ -47,6 +47,34 @@ export const createProduct = async (req, res) => {
 };
 
 /**
+ * deleteProduct - removes a product from the db and its image from cloudinary
+ */
+export const deleteProduct = async (req, res) => {
+  try {
+    // Find product in db
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      // Retrieve image id from cloudinary (Ex. https://res.cloudinary.com/cloudname/image/upload/???/publicId.jpg)
+      const publicId = product.image.split('/').pop().split('.')[0];
+      try {
+        // Remove image from cloudinary
+        await cloudinary.uploader.destroy(publicId);
+      } catch (error) {
+        console.log(`Error deleting image from cloudinary: ${error.message}`);
+      }
+      // Remove product from db
+      await Product.findByIdAndDelete(req.params.id);
+      return res.status(200).json({ message: 'Product deleted successfully!' });
+    } else {
+      // 404 (Not found)
+      return res.status(404).json({ message: 'Product not found!' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: `Error deleting product: ${error.message}` });
+  }
+};
+
+/**
  * getFeaturedProducts - retrieves all the featured products from the cache/db
  */
 export const getFeaturedProducts = async (req, res) => {
