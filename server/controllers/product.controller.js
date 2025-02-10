@@ -103,3 +103,31 @@ export const getFeaturedProducts = async (req, res) => {
       .json({ message: `Error retrieving featured products: ${error.message}` });
   }
 };
+
+/**
+ * getRecommendedProducts - retrieves a list of recommended products
+ */
+export const getRecommendedProducts = async (req, res) => {
+  try {
+    // Retrieve a group of 4 products in plain JS object form
+    const products = await Product.aggregate([
+      {
+        $sample: { size: 4 },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          price: 1,
+          description: 1,
+          image: 1,
+        },
+      },
+    ]);
+    return res.status(200).json({ products, message: 'Retrieved recommended products' });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Error getting recommended products: ${error.message}` });
+  }
+};

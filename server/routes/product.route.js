@@ -10,6 +10,7 @@ import {
   createProduct,
   deleteProduct,
   getFeaturedProducts,
+  getRecommendedProducts,
 } from '../controllers/product.controller.js';
 
 const router = express.Router();
@@ -21,5 +22,7 @@ router.post('/', verifyAccess, adminAccess, createProduct);
 router.delete('/:id', verifyAccess, adminAccess, deleteProduct);
 
 router.get('/featured', getFeaturedProducts);
+
+router.get('/recommended', getRecommendedProducts);
 
 export default router;
