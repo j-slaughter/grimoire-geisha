@@ -4,6 +4,7 @@
  */
 import Product from '../models/product.model.js';
 import { redis } from '../db/redis.js';
+import cloudinary from '../db/cloudinary.js';
 
 /**
  * getAllProducts - retrieves all the products from the db
@@ -14,6 +15,34 @@ export const getAllProducts = async (req, res) => {
     return res.status(200).json({ products, message: 'Retrieved all products' });
   } catch (error) {
     return res.status(500).json({ message: `Error retrieving all products: ${error.message}` });
+  }
+};
+
+/**
+ * createProduct - adds a new product to db
+ */
+export const createProduct = async (req, res) => {
+  try {
+    const product = req.body;
+    // Add image to cloudinary bucket
+    let uploadImg = null;
+    if (product.image) {
+      uploadImg = await cloudinary.uploader.upload(product.image, {
+        asset_folder: 'products',
+      });
+    }
+    // Add product to db
+    const newProduct = await Product.create({
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      image: uploadImg ? uploadImg.secure_url : '',
+      category: product.category,
+    });
+    // 201 (Created)
+    return res.status(201).json({ product: newProduct, message: 'Created new product!' });
+  } catch (error) {
+    return res.status(500).json({ message: `Error creating product: ${error.message}` });
   }
 };
 

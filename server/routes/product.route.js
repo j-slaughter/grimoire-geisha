@@ -5,11 +5,17 @@
 
 import express from 'express';
 import { verifyAccess, adminAccess } from '../middleware/auth.middleware.js';
-import { getAllProducts, getFeaturedProducts } from '../controllers/product.controller.js';
+import {
+  getAllProducts,
+  createProduct,
+  getFeaturedProducts,
+} from '../controllers/product.controller.js';
 
 const router = express.Router();
 
 router.get('/', verifyAccess, adminAccess, getAllProducts);
+
+router.post('/', verifyAccess, adminAccess, createProduct);
 
 router.get('/featured', getFeaturedProducts);
 
