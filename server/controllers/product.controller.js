@@ -7,6 +7,28 @@ import { redis } from '../db/redis.js';
 import cloudinary from '../db/cloudinary.js';
 
 /**
+ * updateFeaturedProductsCache - retrieves all featured products from db and writes them to the Redis cache
+ */
+const updateFeaturedProductsCache = async () => {
+  try {
+    // Retrieve featured products from db in plain JS object form
+    const products = await Product.find({ isFeatured: true }).lean();
+    // Check if any featured products
+    if (products.length > 0) {
+      // Save in cache
+      await redis.set('featured_products', JSON.stringify(products));
+    } else {
+      // Clear cache
+      await redis.del(['featured_products']);
+    }
+    console.log('Updated featured products in cache!');
+    return products;
+  } catch (error) {
+    console.log(`Error updating featured products in cache: ${error.message}`);
+  }
+};
+
+/**
  * getAllProducts - retrieves all the products from the db
  */
 export const getAllProducts = async (req, res) => {
@@ -55,10 +77,9 @@ export const updateProduct = async (req, res) => {
     // Update the product in the db and return updated product
     const product = await Product.findByIdAndUpdate(req.params.id, update, { new: true });
     if (product) {
-      // If featured product, update Redis cache
-      // The typeof update.isFeatured is a string, so need to compare to string true
-      if (update.isFeatured === 'true') {
-        console.log('This works!');
+      // If isFeatured is updated, update Redis cache
+      if (update['isFeatured']) {
+        await updateFeaturedProductsCache();
       }
       return res.status(200).json({ product, message: 'Product updated successfully!' });
     } else {
@@ -111,11 +132,10 @@ export const getFeaturedProducts = async (req, res) => {
         message: 'Retrieved all featured products from cache',
       });
     }
-    // Otherwise, retrieve products from db in plain JS object form
-    products = await Product.find({ isFeatured: true }).lean();
+    // Otherwise, retrieve products from db in plain JS object form and save to cache
+    products = await updateFeaturedProductsCache();
+    // Check if any featured products were found
     if (products.length > 0) {
-      // Save in cache
-      await redis.set('featured_products', JSON.stringify(products));
       return res.status(200).json({ products, message: 'Retrieved all featured products from db' });
     } else {
       // 404 (Not found)
