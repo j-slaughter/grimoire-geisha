@@ -47,6 +47,30 @@ export const createProduct = async (req, res) => {
 };
 
 /**
+ * updateProduct - updates a product
+ */
+export const updateProduct = async (req, res) => {
+  const update = req.body;
+  try {
+    // Update the product in the db and return updated product
+    const product = await Product.findByIdAndUpdate(req.params.id, update, { new: true });
+    if (product) {
+      // If featured product, update Redis cache
+      // The typeof update.isFeatured is a string, so need to compare to string true
+      if (update.isFeatured === 'true') {
+        console.log('This works!');
+      }
+      return res.status(200).json({ product, message: 'Product updated successfully!' });
+    } else {
+      // 404 (Not found)
+      return res.status(404).json({ message: 'Unable to update - Product not found!' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: `Error updating product: ${error.message}` });
+  }
+};
+
+/**
  * deleteProduct - removes a product from the db and its image from cloudinary
  */
 export const deleteProduct = async (req, res) => {
@@ -129,5 +153,21 @@ export const getRecommendedProducts = async (req, res) => {
     return res
       .status(500)
       .json({ message: `Error getting recommended products: ${error.message}` });
+  }
+};
+
+/**
+ * getCategoryProducts - retrieves all the products from a category from the db
+ */
+export const getCategoryProducts = async (req, res) => {
+  const { category } = req.params;
+  try {
+    // Retrieve all products with specified category
+    const products = await Product.find({ category });
+    return res.status(200).json({ products, message: `Retrieved all ${category} products` });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Error retrieving ${category} products: ${error.message}` });
   }
 };
