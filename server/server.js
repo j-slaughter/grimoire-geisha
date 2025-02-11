@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.route.js';
 import productRoutes from './routes/product.route.js';
+import cartRoutes from './routes/cart.route.js';
 import { connectDB } from './db/db.js';
 
 const app = express();
@@ -21,6 +22,9 @@ app.use('/api/auth', authRoutes);
 
 // Handling Products
 app.use('/api/products', productRoutes);
+
+// Handling Checkout Cart
+app.use('/api/cart', cartRoutes);
 
 // Landing page
 app.get('/', (req, res) => {
