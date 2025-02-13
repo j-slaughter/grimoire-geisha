@@ -1,3 +1,8 @@
+/**
+ * @module cart.route.js
+ * @description Router for handling checkout cart
+ */
+
 import express from 'express';
 import { verifyAccess } from '../middleware/auth.middleware.js';
 import {
