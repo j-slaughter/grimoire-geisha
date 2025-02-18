@@ -19,7 +19,7 @@ export const createCoupon = async (req, res) => {
     // 201 (Created)
     return res.status(201).json({ coupon: newCoupon, message: 'Coupon created!' });
   } catch (error) {
-    return res.status(500).json({ message: `Error getting coupon: ${error.message}` });
+    return res.status(500).json({ message: `Error creating coupon: ${error.message}` });
   }
 };
 
@@ -46,6 +46,6 @@ export const validateCoupon = async (req, res) => {
     }
     return res.status(200).json({ coupon, message: 'Found coupon!' });
   } catch (error) {
-    return res.status(500).json({ message: `Error getting coupon: ${error.message}` });
+    return res.status(500).json({ message: `Error validating coupon: ${error.message}` });
   }
 };
