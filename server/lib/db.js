@@ -1,3 +1,7 @@
+/**
+ * @module db.js
+ * @description Sets up MongoDB connection
+ */
 import mongoose from 'mongoose';
 
 const uri = process.env.MONGO_URI;

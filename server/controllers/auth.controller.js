@@ -4,7 +4,7 @@
  */
 import User from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
-import { redis } from '../db/redis.js';
+import { redis } from '../lib/redis.js';
 
 /**
  * generateTokens - create accessToken and refreshToken for authenticating

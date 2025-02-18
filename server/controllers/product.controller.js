@@ -3,8 +3,8 @@
  * @description Controller for handling products
  */
 import Product from '../models/product.model.js';
-import { redis } from '../db/redis.js';
-import cloudinary from '../db/cloudinary.js';
+import { redis } from '../lib/redis.js';
+import cloudinary from '../lib/cloudinary.js';
 
 /**
  * updateFeaturedProductsCache - retrieves all featured products from db and writes them to the Redis cache

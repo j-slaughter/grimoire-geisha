@@ -1,3 +1,7 @@
+/**
+ * @module cloudinary.js
+ * @description Sets up Cloudinary connection
+ */
 import { v2 as cloudinary } from 'cloudinary';
 
 // Configuration
