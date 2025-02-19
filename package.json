@@ -2,7 +2,7 @@
   "name": "grimoire-geisha",
   "version": "1.0.0",
   "description": "E-commerce site",
-  "main": "index.js",
+  "main": "server/server.js",
   "type": "module",
   "scripts": {
     "start": "node server/server.js",
