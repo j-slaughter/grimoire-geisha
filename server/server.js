@@ -16,6 +16,9 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(path.join(__dirname, 'public')));
+// Parse data client sends as JSON with Content-Type: application/json
+app.use(express.json());
+// Parse data client sends in HTML forms with Content-Type: application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 

@@ -2,7 +2,6 @@
  * @module payment.controller.js
  * @description Controller for handling payment
  */
-import Order from '../models/order.model.js';
 import { stripe } from '../lib/stripe.js';
 
 /**
@@ -30,9 +29,9 @@ export const createCheckoutSession = async (req, res) => {
     // Initialize total to 0
     let total = 0;
 
-    // Generate lineItems for Stripe checkout session
+    // Generate lineItems for Stripe checkout session (Ref docs: https://docs.stripe.com/api/checkout/sessions/create)
     const lineItems = products.map((product) => {
-      // Calculate individual price of product in cents
+      // Calculate individual price of product in cents (must be cents per Stripe docs)
       let amount = Math.round(product.price * 100);
       // Multiply amount by quantity of product
       amount *= product.quantity;
@@ -72,7 +71,7 @@ export const createCheckoutSession = async (req, res) => {
       mode: 'payment',
       metadata: {
         userId: req.user._id.toString(),
-        couponDiscount: couponDiscount || '',
+        couponDiscount: couponDiscount || 'No coupon discount',
       },
       success_url: `${process.env.CLIENT_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_DOMAIN}/cancel`,
