@@ -3,6 +3,7 @@
  * @description Controller for handling payment
  */
 import { stripe } from '../lib/stripe.js';
+import Order from '../models/order.model.js';
 
 /**
  * createStripeCoupon - creates a Stripe coupon object and returns the id
@@ -70,8 +71,15 @@ export const createCheckoutSession = async (req, res) => {
         : [],
       mode: 'payment',
       metadata: {
-        userId: req.user._id.toString(),
-        couponDiscount: couponDiscount || 'No coupon discount',
+        userId: req.user._id,
+        couponDiscount: couponDiscount ? couponDiscount.toString() : 'No coupon discount',
+        products: JSON.stringify(
+          products.map((p) => ({
+            product: p._id,
+            quantity: p.quantity,
+            price: p.price,
+          }))
+        ),
       },
       success_url: `${process.env.CLIENT_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_DOMAIN}/cancel`,
@@ -81,5 +89,33 @@ export const createCheckoutSession = async (req, res) => {
     return res.status(200).json({ id: session.id, totalAmount: total / 100 });
   } catch (error) {
     return res.status(500).json({ message: `Error creating checkout session: ${error.message}` });
+  }
+};
+
+/**
+ * createOrder - creates a new order from successful checkouts
+ */
+export const createOrder = async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    // Retrieve the session from Stripe
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    // Check for successful payment
+    if (session.payment_status === 'paid') {
+      // Create a new order
+      const products = JSON.parse(session.metadata.products);
+      const newOrder = await Order.create({
+        user: session.metadata.userId,
+        products,
+        couponDiscount: session.metadata.couponDiscount,
+        totalAmount: session.amount_total / 100,
+        stripeSessionId: sessionId,
+      });
+      return res.status(200).json({ order: newOrder, message: 'Order created!' });
+    }
+    // 402 (Payment required)
+    return res.status(402).json({ message: 'Unable to create order - stripe payment not paid' });
+  } catch (error) {
+    return res.status(500).json({ message: `Error creating order: ${error.message}` });
   }
 };
