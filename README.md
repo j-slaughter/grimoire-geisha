@@ -23,12 +23,12 @@ src/
 │── stores/               # State management
 │    └── TBD/
 server/
-├── controllers/          # Functionality for auth/cart/coupons/payment/products
+├── controllers/          # Functionality for analytics/auth/cart/coupons/payment/products
 ├── lib/                  # Database and Third-Party API config
 ├── middleware/
 │   ├── auth.middleware.js   # Authentication and authorization middleware
 ├── models/               # Database models for coupons/orders/products/users
-└── routes/               # Routers for auth/cart/coupons/payment/products
+└── routes/               # Routers for analytics/auth/cart/coupons/payment/products
 ```
 
 ## Technical Details
