@@ -34,10 +34,8 @@ export const createCheckoutSession = async (req, res) => {
     const lineItems = products.map((product) => {
       // Calculate individual price of product in cents (must be cents per Stripe docs)
       let amount = Math.round(product.price * 100);
-      // Multiply amount by quantity of product
-      amount *= product.quantity;
-      // Update total amount
-      total += amount;
+      // Multiply amount by quantity of product and update total amount
+      total += amount * product.quantity;
       // Return Stripe lineItem product
       return {
         price_data: {
@@ -71,7 +69,8 @@ export const createCheckoutSession = async (req, res) => {
         : [],
       mode: 'payment',
       metadata: {
-        userId: req.user._id,
+        // metadata values must be strings
+        userId: req.user._id.toString(),
         couponDiscount: couponDiscount ? couponDiscount.toString() : 'No coupon discount',
         products: JSON.stringify(
           products.map((p) => ({
@@ -86,7 +85,7 @@ export const createCheckoutSession = async (req, res) => {
     });
 
     // Return calculated total and session id
-    return res.status(200).json({ id: session.id, totalAmount: total / 100 });
+    return res.status(200).json({ sessionId: session.id, totalAmount: total / 100 });
   } catch (error) {
     return res.status(500).json({ message: `Error creating checkout session: ${error.message}` });
   }
