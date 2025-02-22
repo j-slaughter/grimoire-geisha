@@ -3,11 +3,14 @@ import path from 'path';
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
+
 import authRoutes from './routes/auth.route.js';
 import productRoutes from './routes/product.route.js';
 import cartRoutes from './routes/cart.route.js';
 import couponRoutes from './routes/coupon.route.js';
 import paymentRoutes from './routes/payment.route.js';
+import analyticsRoutes from './routes/analytics.route.js';
+
 import { connectDB } from './lib/db.js';
 
 const app = express();
@@ -36,6 +39,9 @@ app.use('/api/coupons', couponRoutes);
 
 // Handling Payment
 app.use('/api/payment', paymentRoutes);
+
+// Analytics Dashboard
+app.use('/api/analytics', analyticsRoutes);
 
 // Landing page
 app.get('/', (req, res) => {
