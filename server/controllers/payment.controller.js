@@ -33,7 +33,7 @@ export const createCheckoutSession = async (req, res) => {
     // Generate lineItems for Stripe checkout session (Ref docs: https://docs.stripe.com/api/checkout/sessions/create)
     const lineItems = products.map((product) => {
       // Calculate individual price of product in cents (must be cents per Stripe docs)
-      let amount = Math.round(product.price * 100);
+      const amount = Math.round(product.price * 100);
       // Multiply amount by quantity of product and update total amount
       total += amount * product.quantity;
       // Return Stripe lineItem product
@@ -80,8 +80,8 @@ export const createCheckoutSession = async (req, res) => {
           }))
         ),
       },
-      success_url: `${process.env.CLIENT_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_DOMAIN}/cancel`,
+      success_url: `${process.env.CLIENT_DOMAIN}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.CLIENT_DOMAIN}/payment-cancel`,
     });
 
     // Return calculated total and session id

@@ -47,7 +47,7 @@ export const verifyAccess = async (req, res, next) => {
  * adminAccess - verifies user is an admin
  */
 
-export const adminAccess = async (req, res, next) => {
+export const adminAccess = (req, res, next) => {
   // Check for logged in user(accessToken) and role of admin
   if (req.user && req.user.role === 'admin') {
     next();

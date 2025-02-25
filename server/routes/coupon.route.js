@@ -9,7 +9,7 @@ import { validateCoupon, createCoupon } from '../controllers/coupon.controller.j
 
 const router = express.Router();
 
-router.get('/', validateCoupon);
+router.post('/validate', validateCoupon);
 
 router.post('/', verifyAccess, adminAccess, createCoupon);
 
