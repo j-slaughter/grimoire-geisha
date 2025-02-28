@@ -102,8 +102,8 @@ export const login = async (req, res) => {
     // Validate email
     const user = await User.findOne({ email });
     if (!user) {
-      // 401 (Unauthorized)
-      return res.status(401).json({ message: 'Invalid login credentials!' });
+      // 400 (Bad Request)
+      return res.status(400).json({ message: 'Invalid login credentials!' });
     }
     // Validate password
     const validPassword = await user.comparePassword(password);
@@ -123,8 +123,8 @@ export const login = async (req, res) => {
         message: 'Successful login!',
       });
     }
-    // 401 (Unauthorized)
-    return res.status(401).json({ message: 'Invalid login credentials!' });
+    // 400 (Bad Request)
+    return res.status(400).json({ message: 'Invalid login credentials!' });
   } catch (error) {
     return res.status(500).json({ message: `Login error: ${error.message}` });
   }
