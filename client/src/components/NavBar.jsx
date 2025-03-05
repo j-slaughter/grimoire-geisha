@@ -47,18 +47,65 @@ function NavBar() {
     }
   }
 
+  // Grab these from state later
+  const user = true;
+  const isAdmin = true;
+  const cart = ['product1', 'product2'];
+
   return (
-    <header className="fixed top-0 left-0 w-full backdrop-blur-md shadow-lg z-40">
+    <header className="fixed top-0 left-0 w-full backdrop-blur-md shadow-lg z-40 transition-all duration-300">
       <div className="container mx-auto px-4 py-3">
-        <Link to="/" className="flex items-center">
-          <img src="gg-sticker.png" width="200" height="400" alt="Grimoire Geisha Logo" />
-        </Link>
-        <ShoppingCart />
-        <UserPlus />
-        <LogIn />
-        <LogOut />
-        <Lock />
-        <button onClick={switchMode}>{mode === 'light' ? <Moon /> : <Sun />}</button>
+        <div className="flex flex-wrap justify-center sm:justify-evenly md:justify-between items-center">
+          <Link to="/" className="flex justify-center items-center">
+            <img src="gg-sticker.png" width="200" height="400" alt="Grimoire Geisha Logo" />
+          </Link>
+          <nav className="flex flex-wrap justify-center items-center gap-4">
+            {user && (
+              <Link to="/cart" className="relative group transition duration-300 ease-in-out">
+                <ShoppingCart className="inline-block mr-1" size={20} />
+                <span className="hidden sm:inline">Cart</span>
+                {cart.length > 0 && (
+                  <span className="absolute -top-3 -left-5 bg-emerald-400 text-white text-xs rounded-full px-2 py-0.5 group-hover:bg-amber-600 transition duration-300 ease-in-out">
+                    {cart.length}
+                  </span>
+                )}
+              </Link>
+            )}
+            {isAdmin && (
+              <Link
+                to="/dashboard"
+                className="flex items-center bg-emerald-400 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out"
+              >
+                <Lock className="inline-block" size={18} />
+                <span className="hidden sm:inline ml-2">Dashboard</span>
+              </Link>
+            )}
+            {user ? (
+              <button className="py-2 px-4">
+                <LogOut className="inline-block" size={18} />
+                <span className="hidden sm:inline ml-2">Log Out</span>
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/signup"
+                  className="flex items-center bg-emerald-400 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  <UserPlus className="mr-2" size={18} /> Sign Up
+                </Link>
+                <Link
+                  to="/login"
+                  className="flex items-center bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                >
+                  <LogIn className="mr-2" size={18} /> Login
+                </Link>
+              </>
+            )}
+            <button className="py-2 px-4" onClick={switchMode}>
+              {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            </button>
+          </nav>
+        </div>
       </div>
     </header>
   );
