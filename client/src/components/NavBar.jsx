@@ -81,7 +81,7 @@ function NavBar() {
               </Link>
             )}
             {user ? (
-              <button className="py-2 px-4">
+              <button className="py-2 px-4 rounded-md flex items-center">
                 <LogOut className="inline-block" size={18} />
                 <span className="hidden sm:inline ml-2">Log Out</span>
               </button>
@@ -101,7 +101,7 @@ function NavBar() {
                 </Link>
               </>
             )}
-            <button className="py-2 px-4" onClick={switchMode}>
+            <button className="py-2 px-4 rounded-md flex items-center" onClick={switchMode}>
               {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
           </nav>
