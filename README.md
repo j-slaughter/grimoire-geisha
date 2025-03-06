@@ -17,10 +17,10 @@ The project follows both React and Express best practices with a modularized arc
 ```
 src/
 ├── components/           # Functionality for React components
-├── TBD/
+├── pages/                # Application views
 │   ├── TBD
 │   └── TBD
-│── stores/               # State management
+│── store/               # State management
 │    └── TBD/
 server/
 ├── controllers/          # Functionality for analytics/auth/cart/coupons/payment/products

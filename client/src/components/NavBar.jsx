@@ -48,8 +48,8 @@ function NavBar() {
   }
 
   // Grab these from state later
-  const user = true;
-  const isAdmin = true;
+  const user = false;
+  const isAdmin = false;
   const cart = ['product1', 'product2'];
 
   return (
