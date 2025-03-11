@@ -11,6 +11,7 @@ import { motion } from 'motion/react';
 
 import { updateLoading, updateUser } from '../store/reducers/userReducer.js';
 import axios from '../lib/axios.js';
+import { toast } from 'react-hot-toast';
 
 function SignUp() {
   // Keep track of form state
@@ -36,7 +37,7 @@ function SignUp() {
     // Check for matching password inputs
     if (password !== confirmPassword) {
       dispatch(updateLoading(false));
-      return; // TODO: SEND ALERT TO USER
+      return toast.error('Passwords do not match!');
     }
     // Sign up new user
     try {
@@ -45,7 +46,7 @@ function SignUp() {
       dispatch(updateLoading(false));
     } catch (error) {
       dispatch(updateLoading(false));
-      console.log('an error occurred during signup');
+      return toast.error(error.response.data.message || 'An error occurred during signup');
     }
   };
 

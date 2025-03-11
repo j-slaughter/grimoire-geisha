@@ -4,6 +4,7 @@
  */
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 import NavBar from './components/NavBar.jsx';
 import Home from './pages/Home.jsx';
@@ -30,6 +31,8 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Routes>
         </div>
+        {/*Pop-up notifications*/}
+        <Toaster />
       </div>
     </BrowserRouter>
   );
