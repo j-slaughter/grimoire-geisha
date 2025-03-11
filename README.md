@@ -17,11 +17,11 @@ The project follows both React and Express best practices with a modularized arc
 ```
 src/
 ├── components/           # Functionality for React components
+├── lib/
+│   ├── axios.js          # Axios config
 ├── pages/                # Application views
-│   ├── TBD
-│   └── TBD
-│── store/               # State management
-│    └── TBD/
+│── store/
+│    └── reducers/        # Reducers for user, cart, product states
 server/
 ├── controllers/          # Functionality for analytics/auth/cart/coupons/payment/products
 ├── lib/                  # Database and Third-Party API config
@@ -33,7 +33,8 @@ server/
 
 ## Technical Details
 
-- 💻 Built with React 19 and JavaScript
+- 💻 Built with React 19, Redux and JavaScript
+- 🔑 Express API and middleware
 - 🎨 Styled using Tailwind CSS
 - 🚀 Vite for fast development and building
 - 🔐 Robust authentication system using JWT

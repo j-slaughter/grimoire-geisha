@@ -5,7 +5,11 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from '../lib/axios.js';
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Sun, Moon } from 'lucide-react';
+
+import { updateUser } from '../store/reducers/userReducer.js';
 
 function NavBar() {
   /*
@@ -47,10 +51,26 @@ function NavBar() {
     }
   }
 
-  // Grab these from state later
-  const user = false;
-  const isAdmin = false;
-  const cart = ['product1', 'product2'];
+  // Get current user and cart info from Redux store
+  const { user } = useSelector((state) => state.user);
+  const isAdmin = user?.role === 'admin';
+  const { cart } = useSelector((state) => state.cart);
+
+  // Needed to update the Redux store
+  const dispatch = useDispatch();
+
+  /**
+   * logout - logs the user out of the app
+   */
+  const logout = async () => {
+    try {
+      await axios.post('/auth/logout');
+      // Update user state back to null
+      dispatch(updateUser(null));
+    } catch (error) {
+      console.log('an error occurred during logout');
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 w-full backdrop-blur-md shadow-lg z-40 transition-all duration-300">
@@ -81,7 +101,7 @@ function NavBar() {
               </Link>
             )}
             {user ? (
-              <button className="py-2 px-4 rounded-md flex items-center">
+              <button className="py-2 px-4 rounded-md flex items-center" onClick={logout}>
                 <LogOut className="inline-block" size={18} />
                 <span className="hidden sm:inline ml-2">Log Out</span>
               </button>

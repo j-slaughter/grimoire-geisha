@@ -4,14 +4,16 @@
  */
 
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { UserPen, Mail, Lock, LockKeyhole, User, ArrowRight, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 
-function SignUp() {
-  // Grab this from state later
-  const loading = false;
+import { updateLoading, updateUser } from '../store/reducers/userReducer.js';
+import axios from '../lib/axios.js';
 
+function SignUp() {
+  // Keep track of form state
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,12 +21,40 @@ function SignUp() {
     confirmPassword: '',
   });
 
+  // Get user loading info from Redux store
+  const { loading } = useSelector((state) => state.user);
+
+  // Needed to update the Redux store
+  const dispatch = useDispatch();
+
   /**
-   * handleSubmit - handles user's form data
+   * createNewUser - signup a new user
+   */
+  const createNewUser = async ({ name, email, password, confirmPassword }) => {
+    // Update loading state to true
+    dispatch(updateLoading(true));
+    // Check for matching password inputs
+    if (password !== confirmPassword) {
+      dispatch(updateLoading(false));
+      return; // TODO: SEND ALERT TO USER
+    }
+    // Sign up new user
+    try {
+      const res = await axios.post('/auth/signup', { name, email, password });
+      dispatch(updateUser(res.data.user));
+      dispatch(updateLoading(false));
+    } catch (error) {
+      dispatch(updateLoading(false));
+      console.log('an error occurred during signup');
+    }
+  };
+
+  /**
+   * handleSubmit - handles user's form data to create new user
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    createNewUser(formData);
   };
 
   return (
