@@ -42,6 +42,7 @@ function SignUp() {
     // Sign up new user
     try {
       const res = await axios.post('/auth/signup', { name, email, password });
+      // Update user info in state
       dispatch(updateUser(res.data.user));
       dispatch(updateLoading(false));
     } catch (error) {
