@@ -4,23 +4,50 @@
  */
 
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LogIn, Mail, Lock, ArrowRight, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 
+import { updateLoading, updateUser } from '../store/reducers/userReducer.js';
+import axios from '../lib/axios.js';
+import { toast } from 'react-hot-toast';
+
 function Login() {
+  // Keep track of form data
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Grab this from state later
-  const loading = false;
+  // Get user loading info from Redux store
+  const { loading } = useSelector((state) => state.user);
+
+  // Needed to update the Redux store
+  const dispatch = useDispatch();
+
+  /**
+   * loginUser - login the user
+   */
+  const loginUser = async (email, password) => {
+    // Update loading state to true
+    dispatch(updateLoading(true));
+    // Check for vaild user
+    try {
+      const res = await axios.post('/auth/login', { email, password });
+      // Update user info in state
+      dispatch(updateUser(res.data.user));
+      dispatch(updateLoading(false));
+    } catch (error) {
+      dispatch(updateLoading(false));
+      return toast.error(error.response.data.message || 'An error occurred during login');
+    }
+  };
 
   /**
    * handleSubmit - handles user's form data
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ email, password });
+    loginUser(email, password);
   };
 
   return (
