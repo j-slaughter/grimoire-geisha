@@ -4,13 +4,13 @@
  */
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from '../lib/axios.js';
-import { toast } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Sun, Moon } from 'lucide-react';
 
 import { updateUser } from '../store/reducers/userReducer.js';
+import axios from '../lib/axios.js';
+import { toast } from 'react-hot-toast';
 
 function NavBar() {
   /*
