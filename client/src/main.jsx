@@ -8,14 +8,17 @@ import { Provider } from 'react-redux';
 
 import './index.css';
 import App from './App.jsx';
-import store from './store/store.js';
+import { store, persistor } from './store/store.js';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const root = createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
     {/*Wrap app in Provider component to pass store (access to global state)*/}
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </StrictMode>
 );
