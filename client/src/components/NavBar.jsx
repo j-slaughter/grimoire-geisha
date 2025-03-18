@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Sun, Moon } from 'lucide-react';
 
 import { updateUser } from '../store/reducers/userReducer.js';
@@ -59,6 +59,7 @@ function NavBar() {
 
   // Needed to update the Redux store
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   /**
    * logout - logs the user out of the app
@@ -68,6 +69,8 @@ function NavBar() {
       await axios.post('/auth/logout');
       // Update user state back to null
       dispatch(updateUser(null));
+      // Navigate back to home page
+      navigate('/');
     } catch (error) {
       return toast.error(error.response.data.message || 'An error occurred during logout');
     }
