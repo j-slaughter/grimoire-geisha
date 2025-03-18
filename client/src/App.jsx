@@ -11,6 +11,7 @@ import NavBar from './components/NavBar.jsx';
 import Home from './pages/Home.jsx';
 import SignUp from './pages/SignUp.jsx';
 import Login from './pages/Login.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
 
 // Create Wrapper to scroll up with React Router
 const Wrapper = ({ children }) => {
@@ -31,6 +32,7 @@ function App() {
 
   // Redirect routes depending on user status
   const { user } = useSelector((state) => state.user);
+  const isAdmin = user?.role === 'admin';
 
   return (
     <BrowserRouter>
@@ -46,6 +48,10 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={user ? <Navigate to="/" /> : <SignUp />} />
               <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+              <Route
+                path="/dashboard"
+                element={!isAdmin ? <Navigate to="/login" /> : <AdminDashboard />}
+              />
             </Routes>
           </div>
           {/*Pop-up notifications*/}
