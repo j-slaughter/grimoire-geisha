@@ -2,7 +2,7 @@
 
 Born in Los Angeles, Grimoire Geisha™ is a lifestyle clothing brand. Centered around gaming culture and Japanese animations, Grimoire Geisha™ inspires to create wearable art.
 
-![Demo App](/client/public/gg-preview.mp4)
+![Preview App](/client/public/gg-preview.gif)
 
 ## Features
 
