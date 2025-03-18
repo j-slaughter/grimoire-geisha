@@ -58,7 +58,7 @@ function Login() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-emerald-400">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-emerald-400 font-audiowide animate-neonSign">
           Login to your account
         </h2>
       </motion.div>
@@ -68,7 +68,7 @@ function Login() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <div className="bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-gray-800 py-8 px-4 sm:rounded-lg sm:px-10 shadow-xl shadow-cyan-500/50 ring-2 ring-cyan-500/50">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-300">
