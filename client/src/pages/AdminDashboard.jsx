@@ -8,12 +8,18 @@ import { useState } from 'react';
 import { CirclePlus, Store, TicketPlus, Tag, ChartNoAxesCombined } from 'lucide-react';
 import { motion } from 'motion/react';
 
+import ProductForm from '../components/ProductForm.jsx';
+import ProductsTab from '../components/ProductsTab.jsx';
+import CouponForm from '../components/CouponForm.jsx';
+import CouponsTab from '../components/CouponsTab.jsx';
+import AnalyticsTab from '../components/AnalyticsTab.jsx';
+
 const tabs = [
-  { id: 'create-product', label: 'Create Product', icon: CirclePlus, component: '' },
-  { id: 'products', label: 'Products', icon: Store, component: '' },
-  { id: 'create-coupon', label: 'Create Coupon', icon: TicketPlus, component: '' },
-  { id: 'coupons', label: 'Coupons', icon: Tag, component: '' },
-  { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined, component: '' },
+  { id: 'create-product', label: 'Create Product', icon: CirclePlus, component: ProductForm },
+  { id: 'products', label: 'Products', icon: Store, component: ProductsTab },
+  { id: 'create-coupon', label: 'Create Coupon', icon: TicketPlus, component: CouponForm },
+  { id: 'coupons', label: 'Coupons', icon: Tag, component: CouponsTab },
+  { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined, component: AnalyticsTab },
 ];
 
 function AdminDashboard() {
@@ -54,7 +60,7 @@ function AdminDashboard() {
           ))}
         </motion.div>
         {/* Render the active tab JSX element */}
-        {activeTab.component}
+        {<activeTab.component />}
       </div>
     </div>
   );
