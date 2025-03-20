@@ -113,7 +113,7 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-2 px-4 rounded-md shadow-sm disabled:opacity-50"
+              className="w-full flex justify-center items-center py-2 px-4 rounded-md shadow-sm disabled:opacity-50"
             >
               {loading ? (
                 <>
@@ -122,7 +122,7 @@ function Login() {
                 </>
               ) : (
                 <>
-                  <LogIn className="mr-2 h-5 w-5" aria-hidden="true" />
+                  <LogIn className="mr-2 h-5 w-5" />
                   Login
                 </>
               )}
