@@ -13,8 +13,8 @@ export const createCoupon = async (req, res) => {
     // Add coupon to db
     const newCoupon = await Coupon.create({
       code: coupon.code,
-      discountPercentage: coupon.discount,
-      expirationDate: coupon.date,
+      discountPercentage: coupon.discountPercentage,
+      expirationDate: coupon.expirationDate,
     });
     // 201 (Created)
     return res.status(201).json({ coupon: newCoupon, message: 'Coupon created!' });

@@ -7,6 +7,9 @@ import { useState } from 'react';
 import { TicketPlus, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 
+import axios from '../lib/axios.js';
+import { toast } from 'react-hot-toast';
+
 function CouponForm() {
   // Store new coupon form info
   const [newCoupon, setNewCoupon] = useState({
@@ -14,6 +17,8 @@ function CouponForm() {
     discountPercentage: '',
     expirationDate: '',
   });
+
+  const [loading, setLoading] = useState(false);
 
   // Format date for expiration date minimum
   const formatDate = () => {
@@ -28,14 +33,35 @@ function CouponForm() {
   const todayDate = formatDate();
 
   /**
-   * handleSubmit - handles coupon form data to create new coupon
+   * createCoupon - creates a new coupon
    */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(newCoupon);
+  const createCoupon = async (couponData) => {
+    // Update loading state to true
+    setLoading(true);
+    // Create new coupon
+    try {
+      const res = await axios.post('/coupons', couponData);
+      setLoading(false);
+      return toast.success(res.data.message || 'Successfully created!');
+    } catch (error) {
+      setLoading(false);
+      return toast.error(error.response.data.message || 'An error occurred creating new coupon');
+    }
   };
 
-  const loading = false;
+  /**
+   * handleSubmit - handles coupon form data to create new coupon
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await createCoupon(newCoupon);
+    // Clear form fields
+    setNewCoupon({
+      code: '',
+      discountPercentage: '',
+      expirationDate: '',
+    });
+  };
 
   return (
     <motion.div
