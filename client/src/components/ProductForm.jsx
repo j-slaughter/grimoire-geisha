@@ -4,8 +4,13 @@
  */
 
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { CirclePlus, Upload, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
+
+import { updateLoading, addProduct } from '../store/reducers/productReducer.js';
+import axios from '../lib/axios.js';
+import { toast } from 'react-hot-toast';
 
 const categories = ['pants', 'tops', 'shoes', 'jackets', 'glasses', 'prints', 'gamer gear'];
 
@@ -18,6 +23,12 @@ function ProductForm() {
     category: '',
     image: '',
   });
+
+  // Get products loading info from Redux store
+  const { loading } = useSelector((state) => state.products);
+
+  // Needed to update the Redux store
+  const dispatch = useDispatch();
 
   /**
    * handleImageUpload - handles upload of new product image
@@ -38,14 +49,39 @@ function ProductForm() {
   };
 
   /**
-   * handleSubmit - handles product form data to create new product
+   * createNewProduct - creates a new product
    */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(newProduct);
+  const createNewProduct = async (productData) => {
+    // Update loading state to true
+    dispatch(updateLoading(true));
+    // Create new product
+    try {
+      const res = await axios.post('/products', productData);
+      // Add new product to products list
+      dispatch(addProduct(res.data.product));
+      dispatch(updateLoading(false));
+      return toast.success('Successfully created!');
+    } catch (error) {
+      dispatch(updateLoading(false));
+      return toast.error(error.response.data.message || 'An error occurred creating new product');
+    }
   };
 
-  const loading = false;
+  /**
+   * handleSubmit - handles product form data to create new product
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await createNewProduct(newProduct);
+    // Clear form fields
+    setNewProduct({
+      name: '',
+      price: '',
+      description: '',
+      category: '',
+      image: '',
+    });
+  };
 
   return (
     <motion.div

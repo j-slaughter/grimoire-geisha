@@ -9,6 +9,7 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 
 import userReducer from './reducers/userReducer.js';
 import cartReducer from './reducers/cartReducer.js';
+import productReducer from './reducers/productReducer.js';
 
 // Reference for problem of persisting Redux state through page refresh
 // https://dev.to/mihomihouk/persisting-state-on-page-refresh-in-reactredux-app-58cf
@@ -21,6 +22,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   cart: cartReducer,
+  products: productReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
