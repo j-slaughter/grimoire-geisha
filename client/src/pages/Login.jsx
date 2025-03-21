@@ -33,8 +33,10 @@ function Login() {
     // Check for vaild user
     try {
       const res = await axios.post('/auth/login', { email, password });
+      const user = res.data.user;
       // Update user info in state
-      dispatch(updateUser(res.data.user));
+      // Since state persists in browser's localStorage, only store non-sensitive info
+      dispatch(updateUser({ name: user.name, role: user.role }));
       dispatch(updateLoading(false));
     } catch (error) {
       dispatch(updateLoading(false));
