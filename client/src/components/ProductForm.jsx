@@ -12,7 +12,7 @@ import { updateLoading, addProduct } from '../store/reducers/productReducer.js';
 import axios from '../lib/axios.js';
 import { toast } from 'react-hot-toast';
 
-const categories = ['pants', 'tops', 'shoes', 'jackets', 'glasses', 'prints', 'gamer gear'];
+const categories = ['Pants', 'Tops', 'Shoes', 'Jackets', 'Glasses', 'Prints', 'Gamer Gear'];
 
 function ProductForm() {
   // Store new product form info
@@ -85,7 +85,7 @@ function ProductForm() {
 
   return (
     <motion.div
-      className="bg-gray-800 shadow-lg rounded-lg p-8 mb-8 max-w-xl mx-auto"
+      className="bg-gray-800 shadow-lg shadow-cyan-500/50 ring-2 ring-cyan-500/50 rounded-lg p-8 mb-8 max-w-xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}

@@ -4,9 +4,14 @@
  * and access analytics data
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { CirclePlus, Store, TicketPlus, Tag, ChartNoAxesCombined } from 'lucide-react';
 import { motion } from 'motion/react';
+
+import { loadProducts } from '../store/reducers/productReducer.js';
+import axios from '../lib/axios.js';
+import { toast } from 'react-hot-toast';
 
 import ProductForm from '../components/ProductForm.jsx';
 import ProductsTab from '../components/ProductsTab.jsx';
@@ -27,6 +32,24 @@ function AdminDashboard() {
   // Preset active tab to create product
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
+  // Needed to update the Redux store
+  const dispatch = useDispatch();
+
+  // Load product list from database to state
+  useEffect(() => {
+    const getProductList = async () => {
+      try {
+        // Grab products from database
+        const res = await axios.get('/products');
+        dispatch(loadProducts(res.data.products));
+      } catch (error) {
+        return toast.error(error.response.data.message || 'Error retrieving products list');
+      }
+    };
+    // Call the function to load list
+    getProductList();
+  }, [dispatch]);
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div className="relative container mx-auto my-45 px-4 py-16 z-10">
@@ -39,7 +62,7 @@ function AdminDashboard() {
           Admin Dashboard
         </motion.h1>
         <motion.div
-          className="flex flex-wrap justify-center mb-8"
+          className="flex flex-wrap justify-center mb-16"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
