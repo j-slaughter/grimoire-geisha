@@ -5,6 +5,18 @@
 import Coupon from '../models/coupon.model.js';
 
 /**
+ * getAllCoupons - retrieves all the coupons from the db
+ */
+export const getAllCoupons = async (req, res) => {
+  try {
+    const coupons = await Coupon.find({});
+    return res.status(200).json({ coupons, message: 'Retrieved all coupons' });
+  } catch (error) {
+    return res.status(500).json({ message: `Error retrieving all coupons: ${error.message}` });
+  }
+};
+
+/**
  * createCoupon - creates a coupon in the db
  */
 export const createCoupon = async (req, res) => {

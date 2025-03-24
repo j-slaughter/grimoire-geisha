@@ -5,9 +5,11 @@
 
 import express from 'express';
 import { verifyAccess, adminAccess } from '../middleware/auth.middleware.js';
-import { validateCoupon, createCoupon } from '../controllers/coupon.controller.js';
+import { getAllCoupons, validateCoupon, createCoupon } from '../controllers/coupon.controller.js';
 
 const router = express.Router();
+
+router.get('/', verifyAccess, adminAccess, getAllCoupons);
 
 router.post('/validate', validateCoupon);
 
