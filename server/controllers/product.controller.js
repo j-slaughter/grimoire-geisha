@@ -78,7 +78,7 @@ export const updateProduct = async (req, res) => {
     const product = await Product.findByIdAndUpdate(req.params.id, update, { new: true });
     if (product) {
       // If isFeatured is updated, update Redis cache
-      if (update['isFeatured']) {
+      if (Object.hasOwn(update, 'isFeatured')) {
         await updateFeaturedProductsCache();
       }
       return res.status(200).json({ product, message: 'Product updated successfully!' });

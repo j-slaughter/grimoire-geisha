@@ -23,9 +23,15 @@ const productSlice = createSlice({
     addProduct(state, action) {
       state.products.push(action.payload);
     },
+    // Update a product in the products list
+    updateProduct(state, action) {
+      state.products = state.products.map((product) =>
+        product._id === action.payload.id ? action.payload.update : product
+      );
+    },
     // Delete a product from the products list
     deleteProduct(state, action) {
-      state.products = state.products.filter((product) => product._id !== action.payload._id);
+      state.products = state.products.filter((product) => product._id !== action.payload);
     },
     // Update the products loading state
     updateLoading(state, action) {
@@ -35,6 +41,7 @@ const productSlice = createSlice({
 });
 
 // Export the generated action creators for use in components
-export const { loadProducts, addProduct, deleteProduct, updateLoading } = productSlice.actions;
+export const { loadProducts, addProduct, updateProduct, deleteProduct, updateLoading } =
+  productSlice.actions;
 // Export the slice reducer for use in the store configuration
 export default productSlice.reducer;

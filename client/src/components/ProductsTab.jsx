@@ -10,6 +10,7 @@ import { Star, StarOff, Pencil, Trash2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import Popup from 'reactjs-popup';
 
+import { deleteProduct, updateProduct } from '../store/reducers/productReducer.js';
 import axios from '../lib/axios.js';
 import { toast } from 'react-hot-toast';
 
@@ -31,24 +32,51 @@ function ProductsTab() {
    */
   const removeProduct = async (productId) => {
     try {
-      console.log('deleting product');
+      // Delete product from database
+      await axios.delete(`/products/${productId}`);
+      // Update products list in Redux store
+      dispatch(deleteProduct(productId));
+      toast.success('Product deleted!');
     } catch (error) {
-      console.log('Error!');
+      return toast.error(error.response.data.message || 'Failed to delete product');
     }
   };
 
   /**
-   * editProduct - edits a product
+   * editProduct - edits a product. Allows all fields except image to be edited.
    */
-  const editProduct = (e) => {
-    e.preventDefault();
+  const editProduct = async (productId) => {
     console.log(`Editing product: ${JSON.stringify(editedProduct)}`);
-    // Alert user to successful edit
-    toast.success('Edited product successfully.', { duration: 3000 });
-    // Refresh page
-    setTimeout(() => {
-      navigate(0);
-    }, 3000);
+    try {
+      const res = await axios.patch(`/products/${productId}`, editedProduct);
+      // Update products list in Redux store
+      dispatch(updateProduct({ id: productId, update: res.data.product }));
+      // Alert user to successful edit
+      toast.success('Edited product successfully.', { duration: 3000 });
+      // Refresh page
+      setTimeout(() => {
+        navigate(0);
+      }, 3000);
+    } catch (error) {
+      return toast.error(error.response.data.message || 'An error occurred editing the product');
+    }
+  };
+
+  /**
+   * toggleFeatured - toggles if the product is featured or not
+   * @param {boolean} isFeatured - current feature state of product
+   */
+  const toggleFeatured = async (productId, isFeatured) => {
+    // Toggle isFeatured property on product
+    try {
+      const res = await axios.patch(`/products/${productId}`, { isFeatured: !isFeatured });
+      // Update products list in Redux store
+      dispatch(updateProduct({ id: productId, update: res.data.product }));
+    } catch (error) {
+      return toast.error(
+        error.response.data.message || 'An error occurred updating the feature status'
+      );
+    }
   };
 
   return (
@@ -104,7 +132,7 @@ function ProductsTab() {
               <td className="px-6 py-4 whitespace-nowrap">
                 <button
                   className={`p-2 rounded-full ${product.isFeatured ? 'text-amber-600' : ''}`}
-                  onClick={() => editProduct(product._id)}
+                  onClick={() => toggleFeatured(product._id, product.isFeatured)}
                 >
                   {product.isFeatured ? <Star /> : <StarOff />}
                 </button>
@@ -134,7 +162,14 @@ function ProductsTab() {
                         </div>
                         <div className="w-full py-[10px] px-[5px]">
                           <p className="text-xs mb-5">*Edit only the fields you want changed</p>
-                          <form onSubmit={editProduct}>
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              // Needed to update product details in featured products Redis cache
+                              if (product.isFeatured) editedProduct.isFeatured = true;
+                              editProduct(product._id);
+                            }}
+                          >
                             <div className="mb-2">
                               <label
                                 htmlFor="name"
