@@ -12,6 +12,8 @@ Born in Los Angeles, Grimoire Geisha™ is a lifestyle clothing brand. Centered 
 - Clean, modern UI with Tailwind CSS
 - Seamless, intuitive e-commerce store UX
 
+![Preview Admin Dashboard](/client/public/admin-products.png)
+
 ## Project Structure
 
 The project follows both React and Express best practices with a modularized architecture:
