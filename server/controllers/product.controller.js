@@ -109,6 +109,14 @@ export const deleteProduct = async (req, res) => {
       }
       // Remove product from db
       await Product.findByIdAndDelete(req.params.id);
+      if (product.isFeatured) {
+        try {
+          // Trigger update to featured products cache
+          await updateFeaturedProductsCache();
+        } catch (error) {
+          console.log(`Error updating featured products cache: ${error.message}`);
+        }
+      }
       return res.status(200).json({ message: 'Product deleted successfully!' });
     } else {
       // 404 (Not found)
