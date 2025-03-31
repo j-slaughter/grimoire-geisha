@@ -12,7 +12,7 @@ import { updateLoading, addProduct } from '../store/reducers/productReducer.js';
 import axios from '../lib/axios.js';
 import { toast } from 'react-hot-toast';
 
-const categories = ['Pants', 'Tops', 'Shoes', 'Jackets', 'Glasses', 'Prints', 'Gamer Gear'];
+const categories = ['Pants', 'Tops', 'Shoes', 'Jackets', 'Glasses', 'Prints', 'Gear'];
 
 function ProductForm() {
   // Store new product form info

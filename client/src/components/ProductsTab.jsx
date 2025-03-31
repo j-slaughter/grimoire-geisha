@@ -21,7 +21,7 @@ function ProductsTab() {
   const [editedProduct, setEditedProduct] = useState({});
 
   // Needed for popup product edit form
-  const categories = ['Pants', 'Tops', 'Shoes', 'Jackets', 'Glasses', 'Prints', 'Gamer Gear'];
+  const categories = ['Pants', 'Tops', 'Shoes', 'Jackets', 'Glasses', 'Prints', 'Gear'];
 
   // Needed to update the Redux store
   const dispatch = useDispatch();
