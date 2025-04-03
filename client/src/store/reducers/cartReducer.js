@@ -9,6 +9,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   cart: [],
   coupon: null,
+  subtotal: 0,
   total: 0,
 };
 
@@ -43,6 +44,10 @@ const cartSlice = createSlice({
     updateCoupon(state, action) {
       state.coupon = action.payload;
     },
+    // Update the cart subtotal
+    updateSubtotal(state, action) {
+      state.subtotal = action.payload;
+    },
     // Update the cart total
     updateTotal(state, action) {
       state.total = action.payload;
@@ -51,6 +56,7 @@ const cartSlice = createSlice({
 });
 
 // Export the generated action creators for use in components
-export const { loadCart, addToCart, deleteFromCart, updateCoupon, updateTotal } = cartSlice.actions;
+export const { loadCart, addToCart, deleteFromCart, updateCoupon, updateSubtotal, updateTotal } =
+  cartSlice.actions;
 // Export the slice reducer for use in the store configuration
 export default cartSlice.reducer;
