@@ -10,6 +10,7 @@ import { LogIn, Mail, Lock, ArrowRight, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { updateLoading, updateUser } from '../store/reducers/userReducer.js';
+import { loadCart } from '../store/reducers/cartReducer.js';
 import axios from '../lib/axios.js';
 import { toast } from 'react-hot-toast';
 
@@ -37,6 +38,8 @@ function Login() {
       // Update user info in state
       // Since state persists in browser's localStorage, only store non-sensitive info
       dispatch(updateUser({ name: user.name, role: user.role }));
+      // Load user's saved cart to state
+      getCartItems();
       dispatch(updateLoading(false));
     } catch (error) {
       dispatch(updateLoading(false));
@@ -50,6 +53,21 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     loginUser(email, password);
+  };
+
+  /**
+   * getCartItems - retrieves user's saved cart from database
+   */
+  const getCartItems = async () => {
+    try {
+      const res = await axios.get('/cart');
+      // Update cart in state
+      dispatch(loadCart(res.data.cart));
+    } catch (error) {
+      return toast.error(
+        error.response.data.message || 'An error occurred retrieving the shopping cart'
+      );
+    }
   };
 
   return (

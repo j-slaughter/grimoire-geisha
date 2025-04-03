@@ -3,22 +3,36 @@
  * @description Card component for product viewed on category page
  */
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ShoppingCart, ScanBarcode } from 'lucide-react';
-import toast from 'react-hot-toast';
 import Popup from 'reactjs-popup';
+
+import { addToCart } from '../store/reducers/cartReducer.js';
+import axios from '../lib/axios.js';
+import toast from 'react-hot-toast';
 
 function ProductCard({ product }) {
   // Get user info from state
   const { user } = useSelector((state) => state.user);
 
+  // Needed to update the Redux store
+  const dispatch = useDispatch();
+
   /**
-   * addToCart - places selected product into user's cart
+   * handleAddToCart - places selected product into user's cart
    */
-  const addToCart = () => {
+  const handleAddToCart = async () => {
     // Check for logged in user before adding to cart
     if (user) {
-      return toast.success('Added to cart!');
+      try {
+        // Update cart in database
+        await axios.post('/cart', { productId: product._id });
+        // Update cart in state
+        dispatch(addToCart(product));
+        return toast.success('Added to cart!');
+      } catch (error) {
+        return toast.error(error.response.data.message || 'Error: Unable to add product to cart');
+      }
     } else {
       return toast.error('Please login to add products to cart.', { id: 'login' });
     }
@@ -42,7 +56,7 @@ function ProductCard({ product }) {
         <div className="flex flex-wrap items-center justify-center gap-4">
           <button
             className="flex items-center justify-center rounded-lg px-5 py-2.5 text-center focus:outline-none focus:ring-4 focus:ring-emerald-300"
-            onClick={addToCart}
+            onClick={handleAddToCart}
           >
             <ShoppingCart className="inline-block" size={22} />
             <span className="inline ml-2">Add to Cart</span>
