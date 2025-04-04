@@ -28,7 +28,7 @@ function CartItem({ item }) {
           <img
             src={item.image}
             alt={`${item.name} image`}
-            className="h-20 md:h-32 rounded object-cover shadow-xl shadow-pink-500/50 ring-2 ring-pink-500/50"
+            className="h-20 md:h-32 rounded object-cover shadow-xl shadow-pink-500/50 ring-2 ring-pink-500/50 hover:scale-125"
           />
         </div>
         <label className="sr-only">Choose quantity:</label>
@@ -49,9 +49,26 @@ function CartItem({ item }) {
               <Plus />
             </button>
           </div>
+          {/* Delete Item */}
+          <div className="flex items-center gap-4 md:order-4 md:ml-6">
+            <button
+              className="inline-flex items-center p-1 rounded-md text-red-500 hover:text-red-400"
+              onClick={() => console.log('Deleted!')}
+            >
+              <Trash2 />
+            </button>
+          </div>
           {/* Item Price */}
-          <div className="text-end md:order-4 md:w-32">
+          <div className="text-end md:order-5 md:w-32">
             <p className="text-base font-bold text-emerald-400">${item.price.toFixed(2)}</p>
+          </div>
+        </div>
+        <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
+          <p className="font-audiowide animate-neonSign text-white hover:text-fuchsia-400">
+            {item.name}
+          </p>
+          <div className=" max-h-48 max-w-80 overflow-y-auto">
+            <p className="text-sm text-gray-400">{item.description}</p>
           </div>
         </div>
       </div>

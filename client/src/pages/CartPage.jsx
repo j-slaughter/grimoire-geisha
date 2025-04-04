@@ -81,7 +81,7 @@ function CartPage() {
             {cart.length === 0 ? (
               <EmptyCart />
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-6 mb-6">
                 {cart.map((product) => (
                   <CartItem key={product._id} item={product} />
                 ))}
