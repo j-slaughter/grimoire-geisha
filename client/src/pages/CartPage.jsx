@@ -11,6 +11,7 @@ import { motion } from 'motion/react';
 
 import { updateSubtotal, updateTotal } from '../store/reducers/cartReducer.js';
 import CartItem from '../components/CartItem.jsx';
+import OrderSummary from '../components/OrderSummary.jsx';
 import RecommendedProducts from '../components/RecommendedProducts.jsx';
 
 function CartPage() {
@@ -39,7 +40,7 @@ function CartPage() {
         totalAmount = subtotalAmount - discount;
       }
       // Store total in state
-      dispatch(updateTotal(totalAmount));
+      dispatch(updateTotal(Number(totalAmount).toFixed(2)));
     };
     // Call the function to calculate total
     calculateTotal();
@@ -97,7 +98,7 @@ function CartPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <div>Order Summary</div>
+              <OrderSummary />
               <div>Coupon Section</div>
             </motion.div>
           )}
