@@ -27,7 +27,7 @@ const cartSlice = createSlice({
       const alreadyInCart = state.cart.find((product) => product._id === action.payload._id);
       // Either update product quantity or add product to cart
       if (alreadyInCart) {
-        state.cart.map((product) =>
+        state.cart = state.cart.map((product) =>
           product._id === action.payload._id
             ? { ...product, quantity: product.quantity + 1 }
             : product
@@ -35,6 +35,14 @@ const cartSlice = createSlice({
       } else {
         state.cart.push({ ...action.payload, quantity: 1 });
       }
+    },
+    // Update the quantity of the item in cart
+    updateQuantity(state, action) {
+      state.cart = state.cart.map((product) =>
+        product._id === action.payload.id
+          ? { ...product, quantity: action.payload.quantity }
+          : product
+      );
     },
     // Delete a product from the cart
     deleteFromCart(state, action) {
@@ -56,7 +64,14 @@ const cartSlice = createSlice({
 });
 
 // Export the generated action creators for use in components
-export const { loadCart, addToCart, deleteFromCart, updateCoupon, updateSubtotal, updateTotal } =
-  cartSlice.actions;
+export const {
+  loadCart,
+  addToCart,
+  updateQuantity,
+  deleteFromCart,
+  updateCoupon,
+  updateSubtotal,
+  updateTotal,
+} = cartSlice.actions;
 // Export the slice reducer for use in the store configuration
 export default cartSlice.reducer;

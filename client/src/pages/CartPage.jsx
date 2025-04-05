@@ -21,7 +21,6 @@ function CartPage() {
 
   // Calculate the total amount in the shopping cart
   useEffect(() => {
-    console.log(cart);
     const calculateTotal = () => {
       // Sum the products in cart to get subtotal
       const subtotalAmount = Number(
