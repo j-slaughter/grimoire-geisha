@@ -13,6 +13,7 @@ import { updateSubtotal, updateTotal } from '../store/reducers/cartReducer.js';
 import CartItem from '../components/CartItem.jsx';
 import OrderSummary from '../components/OrderSummary.jsx';
 import RecommendedProducts from '../components/RecommendedProducts.jsx';
+import CouponCard from '../components/CouponCard.jsx';
 
 function CartPage() {
   const { cart, coupon } = useSelector((state) => state.cart);
@@ -107,7 +108,7 @@ function CartPage() {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <OrderSummary />
-              <div>Coupon Section</div>
+              <CouponCard />
             </motion.div>
           )}
         </div>
