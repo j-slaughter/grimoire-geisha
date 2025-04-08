@@ -24,8 +24,7 @@ function CouponCard() {
   /**
    * handleApplyCoupon - handles applying inputted coupon code from user
    */
-  const handleApplyCoupon = async (e) => {
-    e.preventDefault();
+  const handleApplyCoupon = async () => {
     try {
       // Check for valid coupon code
       const res = await axios.post('/coupons/validate', { code: inputCode });
@@ -40,8 +39,7 @@ function CouponCard() {
   /**
    * handleRemoveCoupon - handles removing inputted coupon code from user
    */
-  const handleRemoveCoupon = (e) => {
-    e.preventDefault();
+  const handleRemoveCoupon = () => {
     // Remove coupon from Redux store
     dispatch(updateCoupon(null));
     // Clear inputted coupon code
@@ -75,6 +73,7 @@ function CouponCard() {
         </div>
         <motion.button
           className="flex w-full items-center justify-center rounded-lg px-5 py-2.5 text-sm font-medium hover:text-amber-600 focus:outline-none focus:ring-4 focus:ring-emerald-300"
+          type="button"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleApplyCoupon}
@@ -91,6 +90,7 @@ function CouponCard() {
           </p>
           <motion.button
             className="mt-2 flex w-full items-center justify-center rounded-lg px-5 py-2.5 text-sm font-medium text-red-600 hover:text-red-700"
+            type="button"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRemoveCoupon}
