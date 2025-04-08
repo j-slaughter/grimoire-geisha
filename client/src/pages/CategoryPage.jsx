@@ -58,7 +58,7 @@ function CategoryPage() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           {loading ? (
-            <Loader />
+            <Loader height={'min-h-screen'} />
           ) : (
             <>
               {categoryProducts.length === 0 && (

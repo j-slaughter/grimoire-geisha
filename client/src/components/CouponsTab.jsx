@@ -9,6 +9,7 @@ import { motion } from 'motion/react';
 
 import axios from '../lib/axios.js';
 import { toast } from 'react-hot-toast';
+import Loader from './Loader.jsx';
 
 function CouponsTab() {
   const [loading, setLoading] = useState(true);
@@ -34,15 +35,7 @@ function CouponsTab() {
   return (
     <>
       {loading ? (
-        <div className="flex items-center justify-center">
-          <div className="relative">
-            <div className="w-20 h-20 border-emerald-200 border-2 rounded-full"></div>
-            <div className="w-20 h-20 border-emerald-500 border-t-2 animate-spin rounded-full absolute left-0 top-0"></div>
-            <div className="mt-5 text-emerald-500 text-center text-xl font-semibold animate-pulse">
-              Loading...
-            </div>
-          </div>
-        </div>
+        <Loader height={'min-h-64'} />
       ) : (
         <motion.div
           className="bg-gray-800 shadow-lg shadow-cyan-500/50 ring-2 ring-cyan-500/50 rounded-lg mx-auto max-w-4xl overflow-x-auto"

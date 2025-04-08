@@ -17,7 +17,7 @@ root.render(
   <StrictMode>
     {/*Wrap app in Provider component to pass store (access to global state)*/}
     <Provider store={store}>
-      <PersistGate loading={<Loader />} persistor={persistor}>
+      <PersistGate loading={<Loader height={'min-h-screen'} />} persistor={persistor}>
         <App />
       </PersistGate>
     </Provider>
