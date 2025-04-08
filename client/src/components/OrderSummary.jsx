@@ -8,10 +8,44 @@ import { Link } from 'react-router-dom';
 import { MoveRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
+import { loadStripe } from '@stripe/stripe-js';
+import axios from '../lib/axios.js';
+import toast from 'react-hot-toast';
+
+// Create Stripe Promise to process payment
+// Call 'loadStripe' outside of component's render to avoid recreating the Stripe object on every render
+const stripePromise = loadStripe(
+  'pk_test_51QuJVWJHjAGQrBA029OHfVbRY42xE9n4h6QttcSvvKtCE7lIJE84hVB0ObKU8KQt1f7XCkVPsnWQRiMOVszPBKt900PtOmNhkU'
+);
+
 function OrderSummary() {
-  // Get total, subtotal, and coupon info from Redux store
-  const { total, subtotal, coupon } = useSelector((state) => state.cart);
+  // Get cart, total, subtotal, and coupon info from Redux store
+  const { cart, total, subtotal, coupon } = useSelector((state) => state.cart);
   const savings = (subtotal - total).toFixed(2);
+
+  /**
+   * handleStripePayment - processes user's order through Stripe
+   */
+  const handleStripePayment = async () => {
+    try {
+      const stripe = await stripePromise;
+      // Create a Stripe checkout session
+      const res = await axios.post('/payment/checkout-session', {
+        products: cart,
+        couponDiscount: coupon?.discountPercentage,
+      });
+      // Use session id to redirect to Stripe checkout
+      const sessionId = res.data.sessionId;
+      const result = await stripe.redirectToCheckout({ sessionId });
+      // Per Stripe docs, display the localized error message to customer if 'redirectToCheckout' fails
+      if (result.error) {
+        console.error(result.error.message);
+      }
+    } catch (error) {
+      console.log(`Error handling Stripe payment: ${error}`);
+      return toast.error('Error: Unable to process payment at this time');
+    }
+  };
 
   return (
     <motion.div
@@ -56,7 +90,7 @@ function OrderSummary() {
           className="flex w-full items-center justify-center rounded-lg px-5 py-2.5 font-medium hover:text-amber-600 focus:outline-none focus:ring-4 focus:ring-emerald-300"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => console.log('Pay me!')}
+          onClick={handleStripePayment}
         >
           Proceed to Checkout
         </motion.button>
