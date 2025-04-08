@@ -101,6 +101,9 @@ export const deleteFromCart = async (req, res) => {
     // Filter product from cartItems array
     if (productId) {
       user.cartItems = user.cartItems.filter((product) => product.id !== productId);
+    } else {
+      // Clear cart items completely
+      user.cartItems = [];
     }
     // Save changes to db
     await user.save();

@@ -14,6 +14,8 @@ import Login from './pages/Login.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import CategoryPage from './pages/CategoryPage.jsx';
 import CartPage from './pages/CartPage.jsx';
+import PaymentSuccess from './pages/PaymentSuccess.jsx';
+import PaymentCancel from './pages/PaymentCancel.jsx';
 
 // Create Wrapper to scroll up with React Router
 const Wrapper = ({ children }) => {
@@ -56,6 +58,14 @@ function App() {
               />
               <Route path="/category/:category" element={<CategoryPage />} />
               <Route path="/cart" element={!user ? <Navigate to="/login" /> : <CartPage />} />
+              <Route
+                path="/payment-success"
+                element={!user ? <Navigate to="/login" /> : <PaymentSuccess />}
+              />
+              <Route
+                path="/payment-cancel"
+                element={!user ? <Navigate to="/login" /> : <PaymentCancel />}
+              />
             </Routes>
           </div>
           {/*Pop-up notifications*/}
