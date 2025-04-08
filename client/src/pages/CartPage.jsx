@@ -71,6 +71,14 @@ function CartPage() {
   return (
     <div className="py-8 md:py-16">
       <div className="mx-auto my-45 max-w-screen-xl px-4 2xl:px-0">
+        <motion.h1
+          className="text-4xl font-bold font-audiowide mb-8 text-amber-600 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          Your Cart
+        </motion.h1>
         <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
           <motion.div
             className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl"

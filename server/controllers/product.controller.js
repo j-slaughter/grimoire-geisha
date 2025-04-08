@@ -161,10 +161,10 @@ export const getFeaturedProducts = async (req, res) => {
  */
 export const getRecommendedProducts = async (req, res) => {
   try {
-    // Retrieve a group of 4 products in plain JS object form
+    // Retrieve a group of 3 products in plain JS object form
     const products = await Product.aggregate([
       {
-        $sample: { size: 4 },
+        $sample: { size: 3 },
       },
       {
         $project: {
