@@ -13,6 +13,7 @@ Born in Los Angeles, Grimoire Geisha™ is a lifestyle clothing brand. Centered 
 - Seamless, intuitive e-commerce store UX
 
 ![Preview Admin Dashboard](/client/public/admin-products.png)
+![Preview Analytics](/client/public/gg-admin-dashboard.gif)
 
 ## Project Structure
 
