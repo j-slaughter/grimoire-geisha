@@ -38,7 +38,6 @@ function AnalyticsTab() {
     const fetchAnalyticsData = async () => {
       try {
         const res = await axios.get('/analytics');
-        console.log(res.data);
         // Update state
         setAnalyticsData(res.data.analyticsData);
         setDailySalesData(res.data.dailySalesData);

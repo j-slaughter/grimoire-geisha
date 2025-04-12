@@ -3,7 +3,7 @@
  * @description Redirect page when user successfully completes a cart payment. Processes the order.
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, HandHeart } from 'lucide-react';
@@ -17,6 +17,8 @@ import {
 import axios from '../lib/axios.js';
 
 function PaymentSuccess() {
+  // Save order number
+  const [orderNumber, setOrderNumber] = useState('');
   // Needed to update the Redux store
   const dispatch = useDispatch();
 
@@ -42,7 +44,8 @@ function PaymentSuccess() {
     const processOrder = async (sessionId) => {
       try {
         // Create order in database
-        await axios.post('/payment/checkout-success', { sessionId });
+        const res = await axios.post('/payment/checkout-success', { sessionId });
+        setOrderNumber(res.data.order._id);
         // Clear user's cart
         clearCart();
       } catch (error) {
@@ -81,7 +84,7 @@ function PaymentSuccess() {
           <div className="bg-gray-700 rounded-lg p-4 mb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-400">Order number</span>
-              <span className="text-sm font-semibold text-emerald-400">#12345</span>
+              <span className="text-sm font-semibold text-emerald-400">#{orderNumber}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-400">Estimated delivery</span>
@@ -91,7 +94,7 @@ function PaymentSuccess() {
           <div className="space-y-4">
             {/* TODO: Add functionality to button */}
             <button className="w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg">
-              <HandHeart className="mr-2" size={18} /> Thanks for trusting us!
+              <HandHeart className="mr-2" size={18} /> Thanks for supporting us!
             </button>
             <Link
               to="/"
