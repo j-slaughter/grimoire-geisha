@@ -29,7 +29,6 @@ function Home() {
     const getFeaturedProducts = async () => {
       try {
         const res = await axios.get('/products/featured');
-        console.log(res.data.products);
         setFeaturedProducts(res.data.products);
       } catch (error) {
         console.error(`Error getting featured products: ${error}`);

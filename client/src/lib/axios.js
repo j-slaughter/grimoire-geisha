@@ -12,4 +12,33 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Axios interceptor for auth token refresh
+axiosInstance.interceptors.response.use(
+  function (response) {
+    // If status code is 2xx, return response like normal
+    return response;
+  },
+  async function (error) {
+    // If something goes wrong, refresh the auth before completely rejecting the request
+    // Grab the original request
+    const originalRequest = error.config;
+    // Check if 401 (Unauthorized) response and did not already retry request
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // Retry the request
+      originalRequest._retry = true;
+      // Attempt to refresh the auth token
+      try {
+        const res = await axiosInstance.post('/auth/renew-access');
+        console.log(res.data);
+        return axios(originalRequest);
+      } catch (refreshError) {
+        // If refresh fails
+        console.log('This is the refresh rejection');
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;
