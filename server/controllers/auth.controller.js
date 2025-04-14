@@ -172,11 +172,12 @@ export const renewAccess = async (req, res) => {
         setCookies(res, accessToken, refreshToken);
         return res.status(200).json({ message: 'Access renewed!' });
       } else {
-        // 401 (Unauthorized)
-        return res.status(401).json({ message: 'Invalid user credentials!' });
+        // 403 (Forbidden)
+        return res.status(403).json({ message: 'Invalid user credentials!' });
       }
     }
-    return res.status(401).json({ message: 'Access has expired!' });
+    // 410 (Gone)
+    return res.status(410).json({ message: 'Access has expired!' });
   } catch (error) {
     return res.status(500).json({ message: `Error renewing tokens: ${error.message}` });
   }

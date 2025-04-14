@@ -4,6 +4,8 @@
  */
 
 import axios from 'axios';
+import { store } from '../store/store.js';
+import { updateUser } from '../store/reducers/userReducer.js';
 
 const axiosInstance = axios.create({
   // Set base url to backend api
@@ -32,8 +34,10 @@ axiosInstance.interceptors.response.use(
         console.log(res.data);
         return axios(originalRequest);
       } catch (refreshError) {
-        // If refresh fails
-        console.log('This is the refresh rejection');
+        // If refresh fails, update user state to null
+        console.log(refreshError.response.data);
+        // Note: accessing store directly instead of from Provider seems not best practice. Try to refactor with better solution?
+        store.dispatch(updateUser(null));
         return Promise.reject(refreshError);
       }
     }
